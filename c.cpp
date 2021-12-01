@@ -108,75 +108,126 @@ class createPlayer{
             perception = stats[3];
             health = stats[4];
         }
+};
 
-        void reskill(int num, int inew){
-            if(num = 0){
-                defence = inew;
+//for some reason player stats cant be modified from inside createplayer class
+//class just so it'd be in one place
+class modifyPlayer{
+    public:
+        int x = 100;
+        string s;
+        //by default input is not a valid string number to be converted
+        bool notValid = true;
+        string arr[101] = {};
+
+        void gen_arr(){
+            for(int i = 0;i < 101; i++){
+                arr[i] = to_string(i);
+                //cout << i << ",";
             }
-            else if(num = 1){
-                strength = inew;
-            }
-            else if(num = 2){
-                magic = inew;
-            }
-            else if(num = 3){
-                perception = inew;
-            }
-            else if(num = 4){
-                health = inew;
-            }
+            //cout << endl;
         }
 
-        void set_skill(){
-            //cout << "in set skill func." << endl;
-            int x = 100;
-            string s;
-        
-            for(int i = 0; i < 3;i++){
-                //s = "";
-                WAIT;
-                cout << "Sul on " << x << " skillpointi jagada" << endl;
-                if(x != 0){
-                    //WAIT;
-                    cout << "Ma olen vist " << translate[statNames[i]] << " nii hea: " << endl;
-                    cin >> s;
-                    cout << endl;
-                    //clr();
-                    while (x < stoi(s)){
-                        cout << "Peab olema väiksem kui olemasolevad punktid: "<< endl;
-                        cin >> s;
-                    }
-                    x = x - stoi(s);
-                    reskill(i,stoi(s));
+        bool in_list(string arg){
+            for(int i = 0; i < 101;i++){
+                if(not arg.compare(arr[i])){
+                    cout << "found in list" << endl;
+                    return(true);
                 }
-                else if (x = 0){
-                    //WAIT;
-                    //clr();
-                    cout << "Ma " << translate[statNames[i]] << " yldse ei osanud: \n0" << endl;
-                    reskill(i,0);
-                WAIT;
+
+            }
+            cout << "not found in list" << endl;
+            return(false);
+        }
+
+        int findDef(){
+            WAIT;
+            cout << "Sul on " << x << " skillpointi jagada" << endl;
+            if(x != 0){
+                cout << "Ma olen vist " << translate[statNames[0]] << " nii hea: " << endl;
+                while(notValid){
+                    cin >> s;
+                    if(in_list(s)){
+                        x = x - stoi(s);
+                        return(stoi(s));
+                    }
+                    else{
+                        WAIT;
+                        cout << s << " ei ole sobiv sisestus." << endl << "Sisestage arv: " << endl;
+                    }
                 }
             }
+            cout << "Ma ei olnud " << translate[statNames[0]] << "hea: " <<endl << "0" << endl;
+            return(0);
+        }
+
+        int findStr(){
             WAIT;
+            cout << "Sul on " << x << " skillpointi jagada" << endl;
+            if(x != 0){
+                cout << "Ma olen vist " << translate[statNames[1]] << " nii hea: " << endl;
+                while(notValid){
+                    cin >> s;
+                    //cout << endl;
+                    if(in_list(s)){
+                        x = x - stoi(s);
+                        return(stoi(s));
+                    }
+                    else{
+                        WAIT;
+                        cout << s << " ei ole sobiv sisestus." << endl << "Sisestage arv: " << endl;
+                    }
+                }
+            }
+            cout << "Ma ei olnud " << translate[statNames[1]] << "hea: " <<endl << "0" << endl;
+            return(0);
+        }
+
+        int findMag(){
+            WAIT;
+            cout << "Sul on " << x << " skillpointi jagada" << endl;
+            if(x != 0){
+                cout << "Ma olen vist " << translate[statNames[2]] << " nii hea: " << endl;
+                while(notValid){
+                    cin >> s;
+                    //cout << endl;
+                    if(in_list(s)){
+                        x = x - stoi(s);
+                        return(stoi(s));
+                    }
+                    else{
+                        WAIT;
+                        cout << s << " ei ole sobiv sisestus." << endl << "Sisestage arv: " << endl;
+                    }
+
+                }
+
+            }
+            cout << "Ma ei olnud " << translate[statNames[2]] << "hea: " <<endl << "0" << endl;
+            return(0);
+        }
+
+        int findPer(){
             if(x != 0){
                 //clr();
-                int skill4 = 100-defence-strength-magic;
-                cout << "Ma olin "<< translate[statNames[3]] << " kindlasti nii hea: " << skill4 << endl;
-                reskill(3,skill4);
+                cout << "Ma olin "<< translate[statNames[3]] << " kindlasti nii hea: " << x << endl;
+                return(x);
             }
             else if(x = 0){
                 //clr();
-                cout << "Ma " << translate[statNames[4]] << " ka ei osanud: 0" << endl;
+                cout << "Ma " << translate[statNames[3]] << " ka ei osanud: \n0" << endl;
+                return(0);
             }
-            reskill(10, round(sqrt(skill[0] + skill[1])));
-            updatePLAYERStats();
-            cout << "stats: " << stats[0] << stats[1] << stats[2] << stats[3] << stats[4] << endl;
-            WAIT;
-            clr();
+            cout << "Error in assigning stats" << endl;
+            return(0);
+        }
+
+        int findHp(int def, int str){
+            int hp = 10 + round(sqrt(def + str));
+            cout << "Sul on " << hp << " elu." << endl;
+            return(hp);
         }
 };
-
-//Something is broken in this loadsave func
 
 bool loadSaves(string n){
     cout << "In loadsave func." << endl;
@@ -185,6 +236,7 @@ bool loadSaves(string n){
     string line;
     string s;
     bool exists = false;
+    int delim;
 
     //skill variables to be used
     int idef;
@@ -205,43 +257,48 @@ bool loadSaves(string n){
     data.open(saves, std::ios::in | std::ios::out | std::ios::app);
     
 
-    cout << "debug 1" << endl;
+    //cout << "debug 1" << endl;
 
     //while not end of file
     while(!data.eof() && not exists){
         getline(data,line);
+        int sub = n.find(",");
+        string token = n.substr(0,sub);
+        //cout << "token: " << token << endl;
+        bool nn = not n.compare(token);
         ++lineCount;
-        bool nn = not line.compare(n);
+        //cout << "lineCount: " << lineCount-1 <<endl;
         if(nn){
-            cout << "nn: " << nn <<endl;
             exists = true;
         }
     }
 
     if (exists){
         cout << "debug 2" << endl << "lineCount: " << lineCount << endl;
+        WAIT;
         //skip lines to name
         for(int i = 0; i < lineCount; i++){
             getline(data,s);
-            cout << "s: " << s << endl << "lineCount: " << lineCount << endl;
+            //cout << "s: " << s << endl << "lineCount: " << lineCount << endl;
         }
+        //need to split by multiple delimiters, perhaps reassigning starter string with removed previous split part
+        def = 
+
+        /*
         getline(data,def);
         getline(data,str);
         getline(data,mag);
         getline(data,per);
         getline(data,hp);
 
-        cout << "debug 3" << endl;
-
-        cout << "def: " << stoi(def) << endl << "str: " << stoi(str) << endl << "mag: " << stoi(mag) << endl << "per: " << stoi(per) << endl << "hp: " << stoi(hp) << endl;
-
         idef = stoi(def);
         istr = stoi(str);
         imag = stoi(mag);
         iper = stoi(per);
         ihp = stoi(hp);
-
+        */
         cout << "Salvestatud karakteristest leiti "<< n << endl;
+        WAIT;
         createPlayer Player;
         Player.createPLAYER(tempName,idef,istr,imag,iper,ihp);
         return (true);
@@ -392,9 +449,22 @@ void createCharacter(){
         WAIT;
         //cout << "debug 2" << endl;
         createPlayer Player;
+        modifyPlayer PlayerStats;
+
         Player.createPLAYER(name);
-        Player.set_skill();
-        //cout << "set skills: debug" << endl;
+
+        PlayerStats.gen_arr();
+        //cout << PlayerStats.arr[60] << endl;
+
+        //set skills
+        Player.defence = PlayerStats.findDef();
+        Player.strength = PlayerStats.findStr();
+        Player.magic = PlayerStats.findMag();
+        Player.perception = PlayerStats.findPer();
+        Player.updatePLAYERStats();
+        Player.health = PlayerStats.findHp(Player.defence,Player.strength);
+        Player.updatePLAYERStats();
+
         string saveState;
 
         WAIT;
@@ -412,9 +482,7 @@ void createCharacter(){
             //char gets saved
             cout << "Tegelane salvestati." << endl;
 
-            //Both of these giva name00000
-            cout << Player.name << Player.stats[0] << Player.stats[1] << Player.stats[2] << Player.stats[3] << Player.stats[4] << endl;
-            cout << Player.name << Player.defence << Player.strength << Player.magic << Player.perception << Player.health << endl;
+            //cout << Player.name << Player.defence << Player.strength << Player.magic << Player.perception << Player.health << endl;
 
             saveChar(Player.name, Player.stats[0], Player.stats[1], Player.stats[2], Player.stats[3], Player.stats[4]);
             WAIT;
