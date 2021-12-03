@@ -130,12 +130,12 @@ class modifyPlayer{
         bool in_list(string arg){
             for(int i = 0; i < 101;i++){
                 if(not arg.compare(arr[i])){
-                    cout << "found in list" << endl;
+                    //cout << "found in list" << endl;
                     return(true);
                 }
 
             }
-            cout << "not found in list" << endl;
+            //cout << "not found in list" << endl;
             return(false);
         }
 
@@ -156,7 +156,10 @@ class modifyPlayer{
                     }
                 }
             }
-            cout << "Ma ei olnud " << translate[statNames[0]] << "hea: " <<endl << "0" << endl;
+            else{
+                cout << "Ma ei olnud " << translate[statNames[0]] << "hea: " <<endl << "0" << endl;
+                return(0);
+            }
             return(0);
         }
 
@@ -178,7 +181,10 @@ class modifyPlayer{
                     }
                 }
             }
-            cout << "Ma ei olnud " << translate[statNames[1]] << "hea: " <<endl << "0" << endl;
+            else{
+                cout << "Ma ei olnud " << translate[statNames[1]] << "hea: " <<endl << "0" << endl;
+                return(0);
+            }
             return(0);
         }
 
@@ -202,7 +208,10 @@ class modifyPlayer{
                 }
 
             }
-            cout << "Ma ei olnud " << translate[statNames[2]] << "hea: " <<endl << "0" << endl;
+            else{
+                cout << "Ma ei olnud " << translate[statNames[2]] << "hea: " <<endl << "0" << endl;
+                return(0);
+            }
             return(0);
         }
 
@@ -289,7 +298,7 @@ string loadSaves(string n){
     }
     //cout << "Returning false" << endl;
     //returns impossible text
-    return("!=\")#(¤/%&1784217&/%¤#(&¤&#)&hjnfi&/(¤nhg//%(bhdeokfn&/(654(()/%#");
+    return("!=)#(¤/%&1784217&/%¤#(&¤&#)&hjnfi&/(¤nhg//%(bhdeokfn&/(654(()/%#");
 }
 
 class createEnemy{
@@ -443,14 +452,18 @@ void stop(){
 string createCharacter(){
     cout << "Mu nimi oli vist: " << endl;
     string name;
+
+    //skips this getline 4 some raisin
+    cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
     getline(cin,name);
+    //cout << "name: " << name <<endl;
     string rtrn = loadSaves(name);
     int idef;
     int istr;
     int imag;
     int iper;
     int ihp;
-    bool check = rtrn.compare("!=\")#(¤/%&1784217&/%¤#(&¤&#)&hjnfi&/(¤nhg//%(bhdeokfn&/(654(()/%#");
+    bool check = rtrn.compare("!=)#(¤/%&1784217&/%¤#(&¤&#)&hjnfi&/(¤nhg//%(bhdeokfn&/(654(()/%#");
     if (check){
         //if was found in saves
         WAIT;
@@ -578,15 +591,15 @@ int Lammas_fight(int lDef, int lStr, int lMag, int lPer, int lHp, int pDef, int 
 
 
 void prolog(){
-    cout << "Sa ärkad alasti keset ristteed ning ei mäleta kes sa oled." << endl;
+    cout << "Sa 2rkad alasti keset ristteed ning ei m2leta kes sa oled." << endl;
     WAIT;
-    cout << "Põhja poole on mets kus on pimedam ja puud on kiduramad." << endl;
+    cout << "P6hja poole on mets kus on pimedam ja puud on kiduramad." << endl;
     WAIT;
-    cout << "Ida poole on kanakuut, täiesti tavaline kanakuut..." << endl;
+    cout << "Ida poole on kanakuut, t2iesti tavaline kanakuut..." << endl;
     WAIT;
-    cout << "Lõuna poole on mahajäetud saeveski." << endl;
+    cout << "L6una poole on mahaj2etud saeveski." << endl;
     WAIT;
-    cout << "Lääne poole on kõrts." << endl;
+    cout << "L22ne poole on k2rts." << endl;
     WAIT;
     cout << "Aga ennem... kes sa oled?" << endl;
     WAIT;
@@ -599,7 +612,7 @@ int main() {
     Lammas.createEN("Lammas",20,50,10,10,20);
 
     string y;
-    cout << "Soovite m2ngida? (jah/ei)";
+    cout << "Soovite m2ngida? (jah/ei)" << endl;
     cin >> y;
     bool b_y1 = not y.compare("jah");
     bool b_y2 = not y.compare("Jah");
@@ -650,36 +663,46 @@ int main() {
         string saveState;
         string loaded;
 
+        //cout << "debug" << endl;
         string rtrn = createCharacter();
 
         int sub = rtrn.find(",");
         name = rtrn.substr(0,sub);
         rtrn.replace(0,sub+1,"");
+        cout << "rtrn1: " << rtrn << endl;
 
         sub = rtrn.find(",");
         def = rtrn.substr(0,sub);
         rtrn.replace(0,sub+1,"");
+        cout << "rtrn2: " << rtrn << endl;
 
         sub = rtrn.find(",");
         str = rtrn.substr(0,sub);
         rtrn.replace(0,sub+1,"");
+        cout << "rtrn3: " << rtrn << endl;
 
         sub = rtrn.find(",");
         mag = rtrn.substr(0,sub);
         rtrn.replace(0,sub+1,"");
+        cout << "rtrn4: " << rtrn << endl;
 
         sub = rtrn.find(",");
         per = rtrn.substr(0,sub);
         rtrn.replace(0,sub+1,"");
+        cout << "rtrn5: " << rtrn << endl;
 
         sub = rtrn.find(",");
         hp = rtrn.substr(0,sub);
         rtrn.replace(0,sub+1,"");
+        cout << "rtrn6: " << rtrn << endl;
 
         //sub = rtrn.find(",");
         loaded = rtrn.substr(0,1);
         //rtrn.replace(0,sub+1,"");
         
+        //for some reason every one of these values is the name value
+        cout << def << ","<< str << "," << mag << "," << per << "," << hp << endl;
+
         idef = stoi(def);
         istr = stoi(str);
         imag = stoi(mag);
