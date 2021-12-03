@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdio.h>
 #include <string.h>
 #include <windows.h>
 #include <cstdio>
@@ -9,7 +8,7 @@
 #include <fstream>
 #include <math.h>
 #include <algorithm>
-//#include <typeinfo>
+#include <ctime>
 
 using namespace std;
 
@@ -229,8 +228,8 @@ class modifyPlayer{
         }
 };
 
-bool loadSaves(string n){
-    cout << "In loadsave func." << endl;
+string loadSaves(string n){
+    //cout << "In loadsave func." << endl;
     fstream data;
     string tempName = n;
     string line;
@@ -253,19 +252,20 @@ bool loadSaves(string n){
 
     int lineCount = 0;
     replace(n.begin(),n.end(),' ','-');
-    cout << n << endl;
+    //cout << n << endl;
     data.open(saves, std::ios::in | std::ios::out | std::ios::app);
     
 
     //cout << "debug 1" << endl;
 
     //while not end of file
+    int sub;
     while(!data.eof() && not exists){
         getline(data,line);
-        int sub = n.find(",");
-        string token = n.substr(0,sub);
-        //cout << "token: " << token << endl;
-        bool nn = not n.compare(token);
+        sub = line.find(",");
+        string name = line.substr(0,sub);
+        //cout << "name: " << name << endl;
+        bool nn = not n.compare(name);
         ++lineCount;
         //cout << "lineCount: " << lineCount-1 <<endl;
         if(nn){
@@ -274,7 +274,7 @@ bool loadSaves(string n){
     }
 
     if (exists){
-        cout << "debug 2" << endl << "lineCount: " << lineCount << endl;
+        //cout << "debug 2" << endl << "lineCount: " << lineCount << endl;
         WAIT;
         //skip lines to name
         for(int i = 0; i < lineCount; i++){
@@ -282,29 +282,14 @@ bool loadSaves(string n){
             //cout << "s: " << s << endl << "lineCount: " << lineCount << endl;
         }
         //need to split by multiple delimiters, perhaps reassigning starter string with removed previous split part
-        def = 
-
-        /*
-        getline(data,def);
-        getline(data,str);
-        getline(data,mag);
-        getline(data,per);
-        getline(data,hp);
-
-        idef = stoi(def);
-        istr = stoi(str);
-        imag = stoi(mag);
-        iper = stoi(per);
-        ihp = stoi(hp);
-        */
+        
         cout << "Salvestatud karakteristest leiti "<< n << endl;
         WAIT;
-        createPlayer Player;
-        Player.createPLAYER(tempName,idef,istr,imag,iper,ihp);
-        return (true);
+        return (line);
     }
-    cout << "Returning false" << endl;
-    return(false);
+    //cout << "Returning false" << endl;
+    //returns impossible text
+    return("!=\")#(¤/%&1784217&/%¤#(&¤&#)&hjnfi&/(¤nhg//%(bhdeokfn&/(654(()/%#");
 }
 
 class createEnemy{
@@ -350,35 +335,54 @@ class createWeapon{
         string name = "weapon name";
         int STRdam = 0;
         int MAGdam = 0;
-        int RANdam = 0;
-        int stats[3] = {STRdam,MAGdam,RANdam};
+        int PERdam = 0;
+        int stats[3] = {STRdam,MAGdam,PERdam};
+
+        int wepNum(){
+            bool w1 = not name.compare("pyss");
+            bool w2 = not name.compare("oda");
+            bool w3 = not name.compare("kepp");
+
+            if(w1){
+                return(0);
+            }
+            else if(w2){
+                return(1);
+            }
+            else if(w3){
+                return(2);
+            }
+            else{
+                //this will never happen
+                return(3);
+            }
+        }
 
         void updateWEPStats(){
             stats[0] = STRdam;
             stats[1] = MAGdam;
-            stats[2] = RANdam;
+            stats[2] = PERdam;
         }
 
         void createWEP(string n = "weapon name",int s = 0, int m = 0, int r = 0){
             name = n;
             STRdam = s;
             MAGdam = m;
-            RANdam = r;
+            PERdam = r;
         }
 
         void printWEPStats(){
             cout << "relv: " << name << endl;
             cout << "Strength damage: " << STRdam << endl;
             cout << "Magic damage: " << MAGdam << endl;
-            cout << "Ranged damage: " << RANdam << endl;
+            cout << "Ranged damage: " << PERdam << endl;
         }
 };
 
-void chooseWeapon(){
+string chooseWeapon(){
     clr();
     cout << "Sinu ees on kolm relva..." << endl;
     WAIT;
-    createWeapon playerWeapon;
     string weapon;
     cout << "Kas valid oda, keppi v6i pyssi" << endl;
     WAIT;
@@ -393,39 +397,40 @@ void chooseWeapon(){
 
     while(wrong){
         if(w1){
-            playerWeapon.createWEP("oda",100,10,0);
+            //playerWeapon.createWEP("oda",100,10,0);
             WAIT;
             cout << "Valisid oda." << endl;
             WAIT;
-            clr();
-            playerWeapon.printWEPStats();
-            playerWeapon.updateWEPStats();
+            //playerWeapon.printWEPStats();
+            //playerWeapon.updateWEPStats();
             wrong = false;
+            return("oda,100,10,0,");
         }
         else if(w2){
-            playerWeapon.createWEP("kepp",0,100,10);
+            //playerWeapon.createWEP("kepp",0,100,10);
             WAIT;
             cout << "Valisid keppi." << endl;
             WAIT;
-            clr();
-            playerWeapon.printWEPStats();
-            playerWeapon.updateWEPStats();
+            //playerWeapon.printWEPStats();
+            //playerWeapon.updateWEPStats();
             wrong = false;
+            return("kepp,0,100,10,");
         }
         else if(w3){
-            playerWeapon.createWEP("pyss",10,0,100);
+            //playerWeapon.createWEP("pyss",10,0,100);
             WAIT;
             cout << "Valisid pyssi." << endl;
             WAIT;
-            clr();
-            playerWeapon.printWEPStats();
-            playerWeapon.updateWEPStats();
+            //playerWeapon.printWEPStats();
+            //playerWeapon.updateWEPStats();
             wrong = false;
+            return("pyss,10,0,100,");
         }
         else {
             cout << "Vale valik!!!" << endl;
         }
     }
+    return("");
 }
 
 void stop(){
@@ -435,88 +440,323 @@ void stop(){
 
 //***************************************************************************//
 
-void createCharacter(){
+string createCharacter(){
     cout << "Mu nimi oli vist: " << endl;
     string name;
     getline(cin,name);
-    bool rtrn = loadSaves(name);
-    if (rtrn){
+    string rtrn = loadSaves(name);
+    int idef;
+    int istr;
+    int imag;
+    int iper;
+    int ihp;
+    bool check = rtrn.compare("!=\")#(¤/%&1784217&/%¤#(&¤&#)&hjnfi&/(¤nhg//%(bhdeokfn&/(654(()/%#");
+    if (check){
         //if was found in saves
         WAIT;
-        cout << "found in saves, WIP" << endl;
+
+        return("%s,%i",0,rtrn);
     }
     else{
         WAIT;
         //cout << "debug 2" << endl;
-        createPlayer Player;
         modifyPlayer PlayerStats;
 
-        Player.createPLAYER(name);
-
         PlayerStats.gen_arr();
-        //cout << PlayerStats.arr[60] << endl;
-
         //set skills
-        Player.defence = PlayerStats.findDef();
-        Player.strength = PlayerStats.findStr();
-        Player.magic = PlayerStats.findMag();
-        Player.perception = PlayerStats.findPer();
-        Player.updatePLAYERStats();
-        Player.health = PlayerStats.findHp(Player.defence,Player.strength);
-        Player.updatePLAYERStats();
 
-        string saveState;
+        idef = PlayerStats.findDef();
+        istr = PlayerStats.findStr();
+        imag = PlayerStats.findMag();
+        iper = PlayerStats.findPer();
+        ihp = PlayerStats.findHp(idef,istr);
 
-        WAIT;
-        cout << "Kas soovite tegelase salvestada? (jah/ei): " << endl;
-        cin >> saveState;
-
-        //workaround for not being able to use or operator on string || char
-        bool j1 = not saveState.compare("jah");
-        bool j2 = not saveState.compare("JAH");
-        bool j3 = not saveState.compare("Jah");
-
-        //cout << "debug 3" << endl;
-
-        if(j1 || j2 || j3){
-            //char gets saved
-            cout << "Tegelane salvestati." << endl;
-
-            //cout << Player.name << Player.defence << Player.strength << Player.magic << Player.perception << Player.health << endl;
-
-            saveChar(Player.name, Player.stats[0], Player.stats[1], Player.stats[2], Player.stats[3], Player.stats[4]);
-            WAIT;
-        }
-        else{
-            cout << "Tegelast ei salvestatud." << endl;
-        }
+        return("%s,%i,%i,%i,%i,%i,%i",1,ihp,iper,imag,istr,idef,name);
     }
 
 }
 
-//array decleration must be a constant
-    //well no, under some circumstances
-//its not printing the updated version of the array
+bool ToF(){
+    srand((unsigned) time(0));
+    bool tf = (rand() % 2);
+    return(tf);
+}
+
+int enemyDam(int num){
+    srand((unsigned) time(0));
+    int dam = (rand() % num);
+    return(dam);
+}
+
+int playerDamage(int wep, int pStr, int pMag, int pPer, int wStr, int wMag, int wPer){
+    //0 = püss
+    //1 = oda
+    //2 = kepp
+
+    srand((unsigned) time(0));
+    if(wep = 0){
+        int damage = pPer/10+wPer+(rand() % 4) - 10;
+        return(damage);
+    }
+    else if(wep = 1){
+        int damage = pStr/10+wStr+(rand() % 4) - 10;
+        return(damage);
+    }
+    else if(wep = 2){
+        int damage = pMag/10+wMag+(rand() % 4) - 10;
+        return(damage);
+    }
+    return(0);
+
+}
+
+int Lammas_fight(int lDef, int lStr, int lMag, int lPer, int lHp, int pDef, int pStr, int pMag, int pPer, int pHp, int wep, int wStr, int wMag, int wPer){
+    int score = 0;
+
+    cout << "Sinu ette astub vihane lammas. " << endl;
+
+    //defence is basically % damage reduction
+    //while neither are dead
+    while (pHp > 0 and lHp > 0){
+        WAIT;
+        int x = round((3 + enemyDam(3)) - (3 + enemyDam(3)) * (1-(pDef/100)));     //def is 0.sth or 1
+        //ToF is 50 / 50 roll
+        if(ToF()){
+            cout << "Lammas ründab sind ennem ja lööb sind peaga ning teeb sulle " << x << " HP viga" << endl;
+            WAIT;
+        }
+        else{
+            cout << "Lammas lööb sind tagajalgadega ning teeb sulle " << x << " HP viga" << endl;
+            WAIT;
+        }
+        pHp = pHp - x;
+        score = score - x*10;
+
+        cout << "Sul on " << pHp << " elu";
+
+        int y = round(playerDamage(wep,pStr,pMag,pPer,wStr,wMag,wPer) * (1-(lDef/100)));
+        if (wep = 0){
+            if(ToF){
+                cout << "Sa lased lammast püssiga ning teed talle " << y << " HP viga" << endl;
+            }
+            else{
+                cout << "Lööd lammast püssiga ning teed talle " << y << " HP viga" << endl;
+            }
+        }
+        else if(wep = 1){
+            if(ToF()){
+                cout << "Sa torkad lammast odaga ning teed talle " << y << " Hp viga" << endl;
+            }
+            else{
+                cout << "Sa vehid odaga lamba suunas tehes talle " << y << " HP viga" << endl;
+            }
+        }
+        else if(wep = 2){
+            if(ToF()){
+                cout << "Sa viibutad keppi õhus ning teed lambale " << y << " HP viga" << endl;
+            }
+            else{
+                cout << "Lööd lambale keppiga vastu pead ning teed talle " << y << " HP viga" << endl;
+            }
+        }
+        else{
+            //something broke
+            cout << "Sorry, something went wrong!" << endl;
+            return (2147483648);
+        }
+        lHp = lHp - y;
+        cout << "Lambal on " << lHp << " elu" << endl;
+    }
+    if(pHp = 0){
+        cout << "Ma ei tea kuidas sa selle kaotasid..." << endl;
+    }
+    else{
+        cout << "Sa võitsid!" << endl;
+    }
+    return(score);
+}
+
+
+void prolog(){
+    cout << "Sa ärkad alasti keset ristteed ning ei mäleta kes sa oled." << endl;
+    WAIT;
+    cout << "Põhja poole on mets kus on pimedam ja puud on kiduramad." << endl;
+    WAIT;
+    cout << "Ida poole on kanakuut, täiesti tavaline kanakuut..." << endl;
+    WAIT;
+    cout << "Lõuna poole on mahajäetud saeveski." << endl;
+    WAIT;
+    cout << "Lääne poole on kõrts." << endl;
+    WAIT;
+    cout << "Aga ennem... kes sa oled?" << endl;
+    WAIT;
+}
+
+//have to break down the return because class object hasto be constructed in the main loop
 
 int main() {
-    bool playing = true;
-    createCharacter();
-    //Player.createPLAYER("Peeter",10,20,30,40,50);
+    createEnemy Lammas;
+    Lammas.createEN("Lammas",20,50,10,10,20);
 
-    //while(playing){
+    string y;
+    cout << "Soovite m2ngida? (jah/ei)";
+    cin >> y;
+    bool b_y1 = not y.compare("jah");
+    bool b_y2 = not y.compare("Jah");
+    bool b_y3 = not y.compare("JAH");
+    WAIT;
+
+    string speed;
+    cout << "Dialoogi kiirus: (kiire/keskmine/aeglane)" << endl;
+    cin >> speed;
+
+    bool s1 = not speed.compare("kiire");
+    bool s2 = not speed.compare("keskmine");
+    bool s3 = not speed.compare("aeglane");
+
+    //speed is in ms
+    if(s1){
+        t = 0;
+    }
+    else if(s2){
+        t = 1000;
+    }
+    else if(s3){
+        t = 2000;
+    }
+    else{
+        t = 1000;
+        cout << "Vastus oli sobimatu, seatud keskmiseks.";
+    }
+
+    if(b_y1 || b_y2 || b_y3){
+
+        prolog();
+
+        int idef;
+        int istr;
+        int imag;
+        int iper;
+        int ihp;
+        int iloaded;
+        bool bloaded;
+
+        string def;
+        string str;
+        string mag;
+        string per;
+        string hp;
+        string name;
+        string saveState;
+        string loaded;
+
+        string rtrn = createCharacter();
+
+        int sub = rtrn.find(",");
+        name = rtrn.substr(0,sub);
+        rtrn.replace(0,sub+1,"");
+
+        sub = rtrn.find(",");
+        def = rtrn.substr(0,sub);
+        rtrn.replace(0,sub+1,"");
+
+        sub = rtrn.find(",");
+        str = rtrn.substr(0,sub);
+        rtrn.replace(0,sub+1,"");
+
+        sub = rtrn.find(",");
+        mag = rtrn.substr(0,sub);
+        rtrn.replace(0,sub+1,"");
+
+        sub = rtrn.find(",");
+        per = rtrn.substr(0,sub);
+        rtrn.replace(0,sub+1,"");
+
+        sub = rtrn.find(",");
+        hp = rtrn.substr(0,sub);
+        rtrn.replace(0,sub+1,"");
+
+        //sub = rtrn.find(",");
+        loaded = rtrn.substr(0,1);
+        //rtrn.replace(0,sub+1,"");
         
-        /*
-        for (int i = 0; i < 5; i++){
-            cout <<i <<":"<<Player.stats[i] << " ";
+        idef = stoi(def);
+        istr = stoi(str);
+        imag = stoi(mag);
+        iper = stoi(per);
+        ihp = stoi(hp);
+
+        // 0 = loaded, 1 = not loaded from save
+        iloaded = stoi(loaded);
+        bloaded = !!iloaded;
+
+        createPlayer Player;
+        Player.createPLAYER(name,idef,istr,imag,iper,ihp);
+        Player.showPLAYERStatsPrint();
+        WAIT;
+
+        if(not bloaded){
+            cout << "Kas soovite tegelase salvestada? (jah/ei): " << endl;
+            cin >> saveState;
+
+            //workaround for not being able to use or operator on string || char
+            bool j1 = not saveState.compare("jah");
+            bool j2 = not saveState.compare("JAH");
+            bool j3 = not saveState.compare("Jah");
+
+            //cout << "debug 3" << endl;
+
+            if(j1 || j2 || j3){
+                //char gets saved
+                cout << "Tegelane salvestati." << endl;
+
+                //cout << Player.name << Player.defence << Player.strength << Player.magic << Player.perception << Player.health << endl;
+
+                saveChar(Player.name, Player.stats[0], Player.stats[1], Player.stats[2], Player.stats[3], Player.stats[4]);
+                WAIT;
+            }
+            else{
+                cout << "Tegelast ei salvestatud." << endl;
+            }
         }
-        */
 
-    chooseWeapon();
+        //choose weapon sequence, creating weapon obj inside main loop
+        string wep_rtrn = chooseWeapon();
 
-        //clr();
+        int istrDam;
+        int imagDam;
+        int iperDam;
 
+
+        sub = wep_rtrn.find(",");
+        string wepName = wep_rtrn.substr(0,sub);
+        wep_rtrn.replace(0,sub+1,"");
+
+        sub = wep_rtrn.find(",");
+        string strDam = wep_rtrn.substr(0,sub);
+        wep_rtrn.replace(0,sub+1,"");
+
+        sub = wep_rtrn.find(",");
+        string magDam = wep_rtrn.substr(0,sub);
+        wep_rtrn.replace(0,sub+1,"");
+
+        sub = wep_rtrn.find(",");
+        string perDam = wep_rtrn.substr(0,sub);
+        //wep_rtrn.replace(0,sub+1,"");
         
-        //Player.showPLAYERStatsPrint();
-    
-    stop();
+        istrDam = stoi(strDam);
+        imagDam = stoi(magDam);
+        iperDam = stoi(perDam);
+
+        createWeapon playerWeapon;
+        playerWeapon.createWEP(name,istrDam,imagDam,iperDam);
+        playerWeapon.updateWEPStats();
+        //int lDef, int lStr, int lMag, int lPer, int lHp, int pDef, int pStr, int pMag, int pPer, int pHp, int wep, int wStr, int wMag, int wPer
+
+        Lammas_fight(Lammas.defence,Lammas.strength,Lammas.magic,Lammas.perception,Lammas.health,Player.defence,Player.strength,
+                        Player.magic,Player.perception,Player.health,playerWeapon.wepNum(),playerWeapon.STRdam,
+                        playerWeapon.MAGdam,playerWeapon.PERdam);
+
+        stop();
+    }
 }

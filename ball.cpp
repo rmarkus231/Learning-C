@@ -74,7 +74,7 @@ static void circle(V2f c, float r)
 static void show(void)
 {
     static char row[WIDTH];
-    static char *table =(char*)" _^[";
+    static char *table =(char*)" _^";
     for (int y = 0; y < HEIGHT/2; ++y) {
         for (int x = 0; x < WIDTH; ++x) {
             Pixel t = display[(2*y + 0)*WIDTH + x];
